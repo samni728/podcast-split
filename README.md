@@ -81,10 +81,25 @@ pip install -r requirements.txt
    pip install -r requirements.txt
    ```
 
-2. **获取 HuggingFace Token**
+2. **获取 pyannote.audio 模型授权（重要）**
 
-   - 访问 https://huggingface.co/settings/tokens 获取令牌
-   - 设置环境变量（推荐）或在运行时输入
+   pyannote.audio 模型需要明确授权才能使用，请完成以下步骤：
+
+   a. 注册并登录 [Hugging Face](https://huggingface.co/) 账号
+
+   b. 访问 [pyannote/speaker-diarization-3.1](https://huggingface.co/pyannote/speaker-diarization-3.1) 模型页面
+
+   c. 点击"Access repository"按钮，填写以下信息：
+
+   - 组织/公司名称
+   - 使用目的
+   - 接受许可协议
+
+   d. 等待审核通过（通常很快，有时可能需要几小时）
+
+   e. 一旦获得访问权，访问 [Hugging Face - Settings - Tokens](https://huggingface.co/settings/tokens) 创建访问令牌
+
+   f. 设置环境变量（推荐）或在运行时输入
 
    ```bash
    # 设置环境变量（推荐做法）
