@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# 模型缓存和环境
+model/
+venv/
+env/
+.env
+*.env
+
+# 音频文件(一般较大)
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.m4a
+*.aac
+
+# 输出目录
+*_split/
+
+# 编辑器文件
+.idea/
+.vscode/
+*.swp
+*~
+.DS_Store
+
+# 日志
+*.log 
