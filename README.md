@@ -1,4 +1,6 @@
-# 播客一男一女分轨自动化工具（极简高效版）
+# Podcast 播客分轨自动化工具（针对 NotebookLM）
+
+> 目前大概 90% 以上的识别能力
 
 本工具可自动将一男一女播客音频分离为独立音轨，支持命令行交互和 API 参数调用，极致高效，无需采样、样本、embedding。
 
@@ -10,9 +12,25 @@
 - 全流程无需采样、样本、embedding，极致高效
 - 依赖极简，环境易部署
 
-## 安装依赖
+## 推荐环境配置（conda）
 
-建议使用 Python 3.8-3.10。
+建议优先使用 conda 创建独立环境，避免依赖冲突。
+
+```bash
+# 1. 创建并激活 conda 环境（推荐 Python 3.8-3.10）
+conda create -n podcast-split python=3.9 -y
+conda activate podcast-split
+
+# 2. 安装 ffmpeg（音频处理必需）
+conda install -c conda-forge ffmpeg
+
+# 3. 安装项目依赖
+pip install -r requirements.txt
+```
+
+## 依赖安装（pip 方式，补充）
+
+如无 conda，也可直接用 pip 安装（需提前自行安装 ffmpeg）：
 
 ```bash
 pip install -r requirements.txt
