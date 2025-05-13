@@ -84,7 +84,12 @@ pip install -r requirements.txt
 2. **获取 HuggingFace Token**
 
    - 访问 https://huggingface.co/settings/tokens 获取令牌
-   - 更新 `audio_diarization.py` 中的 `HUGGINGFACE_TOKEN` 变量
+   - 设置环境变量（推荐）或在运行时输入
+
+   ```bash
+   # 设置环境变量（推荐做法）
+   export HUGGINGFACE_TOKEN=你的token值
+   ```
 
 3. **自动生成时间轴**
 
@@ -157,3 +162,42 @@ pip install -r requirements.txt
 - 本工具仅用于合法音频处理
 - 基于 pyannote.audio：https://github.com/pyannote/pyannote-audio
 - 感谢 FFmpeg 项目提供强大的音频处理功能
+
+## 安全提示
+
+1. **不要在代码中硬编码敏感信息**
+
+   - HuggingFace Token 等敏感信息应通过环境变量传递
+   - 避免将含有敏感信息的代码提交到公开仓库
+
+2. **使用 .gitignore**
+   - 项目包含 `.gitignore` 文件，确保敏感文件不会被上传
+   - 模型缓存和大型音频文件不应上传到 GitHub
+
+## GitHub 使用说明
+
+首次上传到 GitHub：
+
+```bash
+# 创建GitHub仓库后，添加远程仓库
+git remote add origin https://github.com/您的用户名/仓库名.git
+
+# 推送代码到GitHub
+git push -u origin master
+git push --tags
+```
+
+后续更新：
+
+```bash
+# 提交更改
+git add .
+git commit -m "更新说明"
+
+# 推送到GitHub
+git push
+
+# 添加新版本标签
+git tag -a v1.x -m "版本说明"
+git push --tags
+```
