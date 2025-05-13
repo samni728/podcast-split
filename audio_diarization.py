@@ -59,7 +59,18 @@ if AUDIO_FILE.lower().endswith('.mp3'):
 
 # 加载 pyannote 3.x 预训练 pipeline
 print("加载预训练模型...")
-pipeline = SpeakerDiarization.from_pretrained("pyannote/speaker-diarization-3.1")
+try:
+    # 注意：使用此模型需要在Hugging Face网站上明确授权
+    # 请访问 https://huggingface.co/pyannote/speaker-diarization-3.1
+    # 点击"Access repository"，填写组织信息并接受许可协议
+    pipeline = SpeakerDiarization.from_pretrained("pyannote/speaker-diarization-3.1")
+except Exception as e:
+    print("\n错误：无法加载模型。可能原因：")
+    print("1. 您尚未获得模型授权。请访问 https://huggingface.co/pyannote/speaker-diarization-3.1 申请授权")
+    print("2. 您的HuggingFace令牌可能无效或过期")
+    print("3. 网络连接问题")
+    print(f"\n具体错误信息: {str(e)}")
+    sys.exit(1)
 
 # 进行说话人分离，强制聚类为2类
 print(f"正在处理: {input_path}")
