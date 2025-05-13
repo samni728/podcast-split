@@ -94,6 +94,59 @@ python podcast_diarize.py --audio_file 你的音频文件.mp3 --output mp3
 
 > **当前依赖仅支持 CPU 版本的 PyTorch。无需安装 CUDA/GPU 相关依赖。**
 
+---
+
+## Windows + CUDA + GPU 加速环境搭建（可选）
+
+如你在 Win11 + NVIDIA 显卡（如 3090/4090）环境下，想用 GPU 加速推理，可参考以下步骤：
+
+1. **创建 conda 环境（推荐 Python 3.9/3.10）**
+   ```bash
+   conda create -n podcast-cuda python=3.9 -y
+   conda activate podcast-cuda
+   ```
+2. **安装 CUDA 版 PyTorch**
+   ```bash
+   # 以 CUDA 11.8 为例（推荐，兼容性好）
+   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+   ```
+   > 如需 CUDA 12.x，可参考 PyTorch 官网选择合适的 wheel。
+3. **安装其它依赖**
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. **安装 ffmpeg（可用 conda 或下载 Windows 版）**
+   ```bash
+   conda install -c conda-forge ffmpeg
+   ```
+5. **设置 HuggingFace Token（cmd 示例）**
+   ```cmd
+   set HUGGINGFACE_TOKEN=你的token值
+   ```
+6. **运行脚本**
+   ```bash
+   python podcast_diarize.py
+   ```
+
+### 检查 GPU 是否可用
+
+在 Python 里测试：
+
+```python
+import torch
+print(torch.cuda.is_available())
+print(torch.cuda.get_device_name(0))
+```
+
+如输出 True 和你的显卡型号，说明 GPU 可用。
+
+### 常见问题
+
+- 若遇到"CUDA 版本不兼容"或"DLL 加载失败"，请检查 CUDA 驱动和 torch 版本是否匹配。
+- 只要你用的是 CUDA 版 torch，pyannote.audio 会自动用 GPU 推理，无需修改代码。
+
+---
+
 ## 常见问题
 
 - **未设置 HUGGINGFACE_TOKEN**：请按上文设置环境变量。
