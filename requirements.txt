@@ -1,3 +1,9 @@
 pyannote.audio>=2.1.1
 # 推荐使用 Python 3.8-3.10
-# 依赖会自动安装 torch、numpy、scipy、librosa、soundfile 等 
+# 依赖会自动安装 torch、numpy、scipy、librosa、soundfile 等
+torch>=1.9.0
+numpy>=1.20.0
+scipy>=1.7.0
+pydub>=0.25.1
+simpleaudio>=1.0.4   # 用于本地试听（可选）
+huggingface_hub>=0.14.1 

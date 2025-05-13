@@ -1,179 +1,89 @@
-# 播客音频分轨自动化工具（针对 NotebookLM）
+# 播客一男一女分轨自动化工具（极简高效版）
 
-这是一个专为播客制作者设计的自动化工具，用于将一男一女对话的播客音频分离成独立音轨。该工具支持自动检测说话人，生成时间轴，并输出高质量的独立音轨，整个流程完全自动化。
+本工具可自动将一男一女播客音频分离为独立音轨，支持命令行交互和 API 参数调用，极致高效，无需采样、样本、embedding。
 
 ## 功能特点
 
-- **全自动说话人检测**：使用 pyannote.audio 3.x 自动检测并区分两个说话人
-- **自动生成时间轴**：无需手动创建 JSON 文件，系统自动分析并生成标准时间轴
-- **智能目录处理**：自动检测音频和时间轴文件位置，无需手动指定路径
-- **高质量音轨分离**：将每个说话人的部分提取为独立音轨，其余时间为静音
-- **音量一致性保证**：分离后的音轨保持与原始音频相同的音量，无累加或阶梯变化
-- **健壮错误处理**：完善的依赖检查和错误提示，确保流程稳定可靠
+- 一键自动分离两位说话人音轨（基于 pyannote.audio 3.x pipeline，num_speakers=2）
+- 支持 mp3/wav 输入，自动输出 output_A.mp3、output_B.mp3
+- 支持菜单交互与命令行参数调用，适合自动化和 API 集成
+- 全流程无需采样、样本、embedding，极致高效
+- 依赖极简，环境易部署
 
-## 系统要求
+## 安装依赖
 
-- Python 3.8-3.10
-- FFmpeg（用于音频处理）
-- jq（用于 JSON 解析）
-- bc（用于数学计算）
-- 适用于 macOS、Linux（Windows 下需使用 WSL）
-
-## 组件说明
-
-### 1. `audio_diarization.py`
-
-自动检测音频中的说话人并生成时间轴 JSON 文件。
-
-**主要功能**：
-
-- 自动检测当前目录下的音频文件（支持 mp3/wav）
-- 使用 pyannote.audio 分析说话人，强制聚类为两人
-- 输出标准格式的时间轴 JSON 文件到以音频文件名命名的目录
-- 自动将 MP3 转换为 WAV（如需要）
-- 模型缓存和输出文件管理
-
-**使用方法**：
-
-```bash
-python audio_diarization.py
-```
-
-### 2. `split_audio.sh`
-
-基于时间轴 JSON 文件将原始音频分割为独立音轨。
-
-**主要功能**：
-
-- 智能目录检测：自动查找音频和 JSON 文件
-- 高质量分轨：确保音量与原始一致，无阶梯变化
-- 解析 JSON 时间轴，生成说话段和静音段
-- 使用 FFmpeg concat 分离器拼接为完整音轨
-- 输出为高质量 MP3 格式
-
-**使用方法**：
-
-```bash
-chmod +x split_audio.sh
-./split_audio.sh
-```
-
-### 3. `requirements.txt`
-
-项目依赖管理文件。
-
-**主要依赖**：
-
-- pyannote.audio>=2.1.1（及其相关依赖）
-- 其他依赖会自动安装（torch、numpy 等）
-
-**安装依赖**：
+建议使用 Python 3.8-3.10。
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## 完整工作流程
+> **注意：当前版本仅支持 CPU 推理，未做 CUDA/GPU 适配。如需 GPU 支持请关注后续版本。**
 
-1. **环境准备**
+## HuggingFace 模型授权
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+1. 注册并登录 [Hugging Face](https://huggingface.co/) 账号
+2. 访问 [pyannote/speaker-diarization-3.1](https://huggingface.co/pyannote/speaker-diarization-3.1) 申请模型访问权限
+3. 获批后，在 [Settings - Tokens](https://huggingface.co/settings/tokens) 创建访问令牌
+4. 设置环境变量：
 
-2. **获取 pyannote.audio 模型授权（重要）**
+- **Mac/Linux (bash/zsh/conda)：**
+  ```bash
+  export HUGGINGFACE_TOKEN=你的token值
+  ```
+- **Windows (cmd)：**
+  ```cmd
+  set HUGGINGFACE_TOKEN=你的token值
+  ```
+- **Windows (PowerShell)：**
+  ```powershell
+  $env:HUGGINGFACE_TOKEN="你的token值"
+  ```
 
-   pyannote.audio 模型需要明确授权才能使用，请完成以下步骤：
+设置后在同一终端窗口运行脚本即可。
 
-   a. 注册并登录 [Hugging Face](https://huggingface.co/) 账号
+## 使用方法
 
-   b. 访问 [pyannote/speaker-diarization-3.1](https://huggingface.co/pyannote/speaker-diarization-3.1) 模型页面
+### 交互模式（推荐新手）
 
-   c. 点击"Access repository"按钮，填写以下信息：
-
-   - 组织/公司名称
-   - 使用目的
-   - 接受许可协议
-
-   d. 等待审核通过（通常很快，有时可能需要几小时）
-
-   e. 一旦获得访问权，访问 [Hugging Face - Settings - Tokens](https://huggingface.co/settings/tokens) 创建访问令牌
-
-   f. 设置环境变量（推荐）或在运行时输入
-
-   ```bash
-   # 设置环境变量（推荐做法）
-   export HUGGINGFACE_TOKEN=你的token值
-   ```
-
-3. **自动生成时间轴**
-
-   ```bash
-   python audio_diarization.py
-   ```
-
-   这将在当前目录检测音频，并在同名子目录下生成 `diarization_timeline.json`
-
-4. **分轨处理**
-   ```bash
-   ./split_audio.sh
-   ```
-   这将自动检测音频和 JSON，并在 `<音频名>_split` 目录下生成分轨文件：
-   - `output_speaker00_track.mp3`
-   - `output_speaker01_track.mp3`
-
-## 输出结构
-
-```
-原始目录/
-  └── 音频文件.mp3
-  └── 音频文件/                    (由audio_diarization.py生成)
-       └── 音频文件.wav           (如原始为mp3)
-       └── diarization_timeline.json
-  └── 音频文件_split/              (由split_audio.sh生成)
-       └── output_speaker00_track.mp3
-       └── output_speaker01_track.mp3
+```bash
+python podcast_diarize.py
 ```
 
-## 常见问题与排错
+- 按提示选择音频文件和输出格式，全自动完成分轨。
 
-1. **模型下载失败**
+### 命令行参数模式（适合自动化/批量处理）
 
-   - 检查网络连接
-   - 确认 HuggingFace Token 是否有效
-   - 查看模型缓存目录权限
+```bash
+python podcast_diarize.py --audio_file 你的音频文件.mp3 --output mp3
+```
 
-2. **分轨音量异常**
+- 支持 mp3/wav 输入，--output 可选 mp3、wav 或 mp3 wav（空格分隔）。
 
-   - 这是最常见的问题，但当前版本已通过 concat 方法解决
-   - 如输出音量仍有问题，检查临时目录权限
+## 输出说明
 
-3. **"找不到音频文件"错误**
+- 输出文件位于与音频同名目录下，如 `output_A.mp3`、`output_B.mp3`
+- 同时生成分离时间轴 `diarization_timeline.json`
 
-   - 确认当前目录或子目录中存在 mp3/wav 文件
-   - 文件名不应含有特殊字符
+## 依赖说明
 
-4. **依赖问题**
-   - 确认已安装 FFmpeg、jq 和 bc
-   - 对于 macOS：`brew install ffmpeg jq bc`
-   - 对于 Ubuntu：`apt install ffmpeg jq bc`
+详见 requirements.txt，核心依赖：
 
-## 扩展与自定义
+- pyannote.audio>=2.1.1（推荐 3.x）
+- torch>=1.9.0
+- pydub>=0.25.1
+- huggingface_hub>=0.14.1
 
-- **支持多人**：修改 `audio_diarization.py` 中的 `num_speakers` 参数
-- **调整输出质量**：修改 `split_audio.sh` 中的 FFmpeg 参数，如 `-q:a` 值
-- **自定义分轨名称**：修改 `split_audio.sh` 中的输出文件名
+> **当前依赖仅支持 CPU 版本的 PyTorch。无需安装 CUDA/GPU 相关依赖。**
 
-## 技术实现细节
+## 常见问题
 
-- 使用 pyannote.audio 3.x 进行说话人分离，基于预训练的深度学习模型
-- 自动生成标准格式 JSON 时间轴文件，无需任何手动标注或辅助
-- 采用 FFmpeg 的 concat 分离器而非 filter_complex，避免拼接过多片段时的缓冲问题
-- 分轨流程为：提取说话段 → 生成静音段 → 合并为完整音轨 → 转码为 mp3
-- 全流程采用绝对路径处理，避免目录切换导致的路径问题
+- **未设置 HUGGINGFACE_TOKEN**：请按上文设置环境变量。
+- **模型授权失败**：请确认已在 HuggingFace 获得 pyannote/speaker-diarization-3.1 访问权限。
+- **分离精度有限**：开源模型对中文播客、多人插话等复杂场景有一定局限，建议保证音频清晰。
+- **采样/样本/embedding**：本工具已彻底移除相关流程，无需采样、无需样本。
 
-## 许可与致谢
+## 版本声明
 
-- 本工具仅用于合法音频处理
-- 基于 pyannote.audio：https://github.com/pyannote/pyannote-audio
-- 感谢 FFmpeg 项目提供强大的音频处理功能
+- 当前版本为极简高效版，仅保留自动分轨核心功能，采样/样本/embedding 相关内容已全部移除。
+- 适合播客分轨自动化和 API 集成。
