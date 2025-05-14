@@ -8,15 +8,14 @@ TEMP_DIR = os.path.join(os.getcwd(), 'temp')
 os.makedirs(TEMP_DIR, exist_ok=True)
 
 def process(audio_file, output_types, progress=gr.Progress()):
-    # 获取文件名和输出目录
-    audio_path = Path(audio_file.name)
+    # audio_file 是上传文件的本地路径
+    audio_path = Path(audio_file)
     base_name = audio_path.stem
     out_dir = os.path.join(TEMP_DIR, base_name)
     os.makedirs(out_dir, exist_ok=True)
-    # 保存上传的音频到 temp 目录
     temp_audio_path = os.path.join(out_dir, audio_path.name)
-    with open(temp_audio_path, 'wb') as f:
-        f.write(audio_file.read())
+    # 复制上传的临时文件到目标目录
+    shutil.copy(audio_file, temp_audio_path)
     progress(0.1, desc="正在进行说话人分离...")
     # 分离
     result, json_path = run_diarization(temp_audio_path, out_dir)
@@ -38,13 +37,13 @@ def process(audio_file, output_types, progress=gr.Progress()):
 def get_audio_name(file):
     if file is None:
         return "未选择文件"
-    return Path(file.name).stem
+    return Path(file).stem
 
 def build_ui():
     with gr.Blocks(title="播客分轨自动化 WebUI") as demo:
         gr.Markdown("# 🎙️ 播客一男一女分轨自动化工具 WebUI\n上传音频，选择输出格式，一键分离！")
         with gr.Row():
-            audio_input = gr.File(label="上传音频文件 (mp3/wav)", type="file")
+            audio_input = gr.File(label="上传音频文件 (mp3/wav)", type="filepath")
             output_type = gr.Radio(["mp3", "wav", "mp3+wav"], value="mp3", label="输出格式")
         start_btn = gr.Button("开始分离")
         with gr.Row():
