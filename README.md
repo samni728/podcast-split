@@ -1,4 +1,4 @@
-# Podcast 播客分轨自动化工具（针对 NotebookLM）\*已支持 GPU
+# Podcast 播客分轨自动化工具（针对 NotebookLM）
 
 > 目前大概 90% 以上的识别能力
 
