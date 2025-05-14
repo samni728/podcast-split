@@ -85,14 +85,16 @@ python podcast_diarize.py --audio_file 你的音频文件.mp3 --output mp3
 
 详见 requirements.txt，核心依赖：
 
-- pyannote.audio>=2.1.1（推荐 3.x）
-- torch>=1.9.0
+- pyannote.audio==3.3.2
+- torch>=1.9.0（支持 CPU 和 CUDA/GPU，推荐根据你的硬件环境安装对应版本）
+- numpy>=1.20.0
+- scipy>=1.7.0
 - pydub>=0.25.1
+- simpleaudio>=1.0.4（可选，本地试听用）
 - huggingface_hub>=0.14.1
+- gradio>=4.0.0（WebUI 图形界面）
 
-> **当前依赖仅支持 CPU 版本的 PyTorch。无需安装 CUDA/GPU 相关依赖。**
-
----
+> 如需 GPU 加速，请确保安装了 CUDA 版本的 torch。
 
 ## Windows + CUDA + GPU 加速环境搭建（可选）
 
