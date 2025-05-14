@@ -1,4 +1,4 @@
-pyannote.audio>=2.1.1
+pyannote.audio==3.3.2
 # 推荐使用 Python 3.8-3.10
 # 依赖会自动安装 torch、numpy、scipy、librosa、soundfile 等
 torch>=1.9.0
