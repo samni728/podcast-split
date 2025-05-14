@@ -66,6 +66,17 @@ def run_diarization(audio_file, out_dir):
         print("请先设置环境变量 HUGGINGFACE_TOKEN"); sys.exit(1)
     login(hf_token)
     pipeline = SpeakerDiarization.from_pretrained("pyannote/speaker-diarization-3.1", use_auth_token=hf_token)
+    # ----------- 设备自动切换 -----------
+    try:
+        import torch
+        if torch.cuda.is_available():
+            pipeline.to(torch.device("cuda"))
+            print("[设备] 已切换到 GPU (cuda)")
+        else:
+            print("[设备] 当前为 CPU")
+    except ImportError:
+        print("[警告] 未安装 torch，默认使用 CPU。")
+    # -----------------------------------
     diarization = pipeline(audio_file, num_speakers=2)
     result = {"speakers": {}}
     for segment, _, speaker in diarization.itertracks(yield_label=True):
