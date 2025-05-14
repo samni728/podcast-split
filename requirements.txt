@@ -6,4 +6,5 @@ numpy>=1.20.0
 scipy>=1.7.0
 pydub>=0.25.1
 simpleaudio>=1.0.4   # 用于本地试听（可选）
-huggingface_hub>=0.14.1 
+huggingface_hub>=0.14.1
+gradio>=4.0.0 
