@@ -1,4 +1,4 @@
-# Podcast 播客分轨自动化工具（针对 NotebookLM）
+# Podcast 播客分轨自动化工具（针对 NotebookLM）\*已支持 GPU
 
 > 目前大概 90% 以上的识别能力
 
@@ -35,8 +35,6 @@ pip install -r requirements.txt
 ```bash
 pip install -r requirements.txt
 ```
-
-> **注意：当前版本仅支持 CPU 推理，未做 CUDA/GPU 适配。如需 GPU 支持请关注后续版本。**
 
 ## HuggingFace 模型授权
 
