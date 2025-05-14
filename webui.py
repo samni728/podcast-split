@@ -8,6 +8,12 @@ TEMP_DIR = os.path.join(os.getcwd(), 'temp')
 os.makedirs(TEMP_DIR, exist_ok=True)
 
 def process(audio_file, output_types, progress=gr.Progress()):
+    # 类型兼容处理，确保 output_types 为列表
+    if isinstance(output_types, str):
+        if output_types == "mp3+wav":
+            output_types = ["mp3", "wav"]
+        else:
+            output_types = [output_types]
     # audio_file 是上传文件的本地路径
     audio_path = Path(audio_file)
     base_name = audio_path.stem
